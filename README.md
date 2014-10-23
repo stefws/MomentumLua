@@ -20,5 +20,6 @@ oo/dkimsiglist.lua   - class of a list of dkim signatures
 Class(es) possible usable when creating a policy:
 
 oo/rfc532x.lua       - class to represent and validate rfc532x email addresses
+oo/rfc532x_usagesample.lua - example of usage of rfc532x class
 
 Enjoy a your leisure!
