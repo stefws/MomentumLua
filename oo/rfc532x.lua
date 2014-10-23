@@ -323,12 +323,10 @@ local function _getIPv6(self)
 end
 
 local function _getIPv4MappedIPv6(self)
---#       (?>(?&v6dg)(?>:(?&v6dg)){5}|(?!(?:.*(?&hexd):){6,})(?P<v46ap>(?&v6dg)(?>:(?&v6dg)){0,4})::(?&v6dg))?:)?
   return '(?>(?&v6dg)(?>:(?&v6dg)){5}|(?!(?:.*(?&hexd):){6,})(?P<v46ap>(?&v6dg)(?>:(?&v6dg)){0,4})::(?&v6dg))?:)?'
 end
 
 local function _getIPv4(self)
---#       (?P<ipv4adr>(?P<v4dg>(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9]))(?>\.(?&v4dg)){3})
   return '(?P<ipv4adr>(?P<v4dg>(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9]))(?>\.(?&v4dg)){3})'
 end
 
@@ -379,28 +377,45 @@ local function _verifyDomain(dom, verify)
   local result = c_VALID
 
   if verify >= c_VERIFYEXIST then
-    local dnsres = nil;
-    local res, err = dnsLookup(dom, 'MX');
+    local dnsres = nil
+    local res, err = dnsLookup(dom, 'MX')
 
     if res == nil and (err == 'NXDOMAIN' or err == 'SERVFAIL') then
       result = c_NXDOMAIN
     elseif verify == c_VERIFYVALIDMX and res ~= nil then
-      local key, mx;
+      local key, mx
 
       --# bugger, we can't lookup CNAME, so RHS = CNAME fails though rfc valid :(
       for key,mx in ipairs(res) do
-        local r, err = dnsLookup(mx, 'A');
+        local r, err = dnsLookup(mx, 'A')
         if r then
           if type(r) == 'table' then
-            dnsres = r[1];
+            dnsres = r[1]
           else
-            dnsres = r;
+            dnsres = r
           end
-          break;
+          break
+--[[  TODO: test for MX RHS -> IPv6
+       elseif self.m_ipv6 then
+	  r, err = dnsLookup(mx, 'AAAA')
+          if r then
+            if type(r) == 'table' then
+              dnsres = r[1]
+            else
+              dnsres = r
+            end
+            break
+          end
+  ]]--
         end
       end
       if dnsres == nil then  --# if no MX found try looking for A
         dnsres, err = dnsLookup(dom, 'A')
+--[[  TODO: optional test for possible AAAA if ipv6 is allowed
+        if not dnsres and self.m_ipv6 then
+          dnsres, err = dnsLookup(dom, 'AAAA')
+        end
+  ]]-
       end
       if type(dnsres) == 'table' and dnsres[1] ~= nil then
         dnsres = dnsres[1];
