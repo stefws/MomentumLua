@@ -455,7 +455,7 @@ local function _verifyDomain(dom, verify)
         if not dnsres and self.m_ipv6 then
           dnsres, err = dnsLookup(dom, 'AAAA')
         end
-  ]]-
+  ]]--
       end
       if type(dnsres) == 'table' and dnsres[1] ~= nil then
         dnsres = dnsres[1];
