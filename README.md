@@ -24,7 +24,7 @@ oo/dkimsiglist.lua   - class of a list of dkim signatures
 
 Class(es) possible usable when creating a policy:
 
-oo/rfc532x.lua       - class to represent and validate rfc532x email addresses
+oo/rfc532x.lua       - class to represent and validate rfc532x email addresses, NOTE: currently c_RFC5322 mode fails to validate due to issues with obsolete regexp, also verify domain doesn't handle IPv6 MXs nor can it verify if RHS of MX -> CNAME, even if RFC allows this, as MSYS doesn't allow to lookup CNAMEs :(
 
 oo/rfc532x_usagesample.lua - example of usage of rfc532x class
 
