@@ -98,14 +98,14 @@ local function _strip2coreEmail(self, rawEmail)
   end
 
   --# drop possible comment
-  rawEmail = rawEmail:gsub('(.-)%s*%(.*%)$', '%1')       --# <email> (Cron Daemon)  -> <email>
+  rawEmail = rawEmail:gsub('(.-)%s*%(.*%)%s*$', '%1')       --# <email> (Cron Daemon)[ *]  -> <email>
 
-
-  --# chase to the core
-  local coreaddr = rawEmail:match('<?.*<(.*)>>?$') --# [<].*<email>[>] -> email
+   --# chase to the core, allowing some of most seen odities :)
+  local coreaddr = rawEmail:match('<?.*<(.*)>>?%s*$') --# [<].*<email>[>][ *] -> email
   if coreaddr then rawEmail = coreaddr; end
 
-  return rawEmail --# don't allow more lead/trail spaces now--# :gsub('^%s*(.*)%s*$', '%1'))
+  --# drop any leading/trailing white space$
+  return rawEmail:gsub('^%s*(.*)%s*$', '%1'))
 end
 
 function __init(self, email, rfc)
