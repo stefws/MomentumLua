@@ -105,7 +105,7 @@ local function _strip2coreEmail(self, rawEmail)
   if coreaddr then rawEmail = coreaddr; end
 
   --# drop any leading/trailing white space$
-  return rawEmail:gsub('^%s*(.*)%s*$', '%1'))
+  return rawEmail:gsub('^%s*(.*)%s*$', '%1')
 end
 
 function __init(self, email, rfc)
