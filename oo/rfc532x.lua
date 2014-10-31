@@ -62,8 +62,8 @@ local CLASSVAR = {
   m_cfws = false,
 
   --# runtime state
-  m_cfws_define,
-  m_fws_define
+  m_cfws_define = true,
+  m_fws_define = true
 }
 
 local function _strip2coreEmail(self, rawEmail)
@@ -77,9 +77,9 @@ local function _strip2coreEmail(self, rawEmail)
 
   --# Drop possible [first] pretty name
   --#   this fails for strings with both \" + \q but what's the likelyhood of this...
-  local escqoute = false
+  local escquote = false
   if rawEmail:find('\\\"') and not rawEmail:find('\\\q') then
-    escqoute = true
+    escquote = true
     rawEmail = rawEmail:gsub('\\\"', '\\\q')
   end
   --# drop quoted pretty name as it might hold "*<*"
@@ -122,7 +122,7 @@ function __init(self, email, rfc)
       instvar.m_dompart = part[2]
     end
   end
-  obj = oo.rawnew(self,instvar)
+  local obj = oo.rawnew(self,instvar)
   if rfc == c_RFC5321 then
     obj:setRfc5321()
   elseif rfc == c_RFC5322 then
