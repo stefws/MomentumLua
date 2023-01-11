@@ -1,6 +1,6 @@
 --[[
 
-Just samle code to illustrate usafe of rfc532x class
+Just sample code to illustrate usage of rfc532x class
 
 ]]--
 
@@ -22,9 +22,9 @@ function mod:validate_data(msg, acc, vctx)
   fromhdr = fromhdr[1]
 
   local em = rfc532x:new(fromhdr, rfc532x.c_RFC5321)
-  --# optional aler default settings from strict 5321 validation
+  --# optional alert default settings from strict 5321 validation
   em:setLocalpartLimit(rfc532x.c_RFC5321_nolimit) --# no length constraint on local part
-  em:setIPv6(false) --# don't allow IPv6 literaaly domain part
+  em:setIPv6(false) --# don't allow IPv6 literally domain part
   if not (em:nulladdress() or em:valid(rfc532x.c_VERIFYEXIST)) then
      custlog:write('RFC532X Bad From: %s mfrom: %s in msg(%s)', tostring(em), msg:mailfrom(), tostring(msg.id))
   end
